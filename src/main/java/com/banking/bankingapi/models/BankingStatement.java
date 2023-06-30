@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record BankingStatement(
         String accountNumber,
         LocalDateTime operationDateTime,
-        String Beneficiary,
+        String beneficiary,
         String comment,
         double amount,
         String currency) {}
