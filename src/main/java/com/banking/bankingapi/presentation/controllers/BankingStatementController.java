@@ -33,6 +33,12 @@ public class BankingStatementController {
         return HttpResponseHelpers.buildResponse(fileResponse);
     }
 
+    @GetMapping(value = "/csv/template", produces = "text/csv")
+    public ResponseEntity<Object> getTemplate() {
+        var fileResponse = service.getTemplateCsv();
+        return HttpResponseHelpers.buildResponse(fileResponse);
+    }
+
     @PostMapping(value = "/csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SerializeCsvResponse<CreateBankingStatementRequest>> importCsv(
             @ModelAttribute ImportCsvRequest request) throws IOException {

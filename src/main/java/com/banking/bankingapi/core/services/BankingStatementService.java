@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,6 +51,22 @@ public class BankingStatementService {
         var inputStream = new InputStreamResource(byteStream);
 
         var filename = "banking-statements.csv";
+
+        return new FileResponse(inputStream, filename, "application/csv");
+    }
+
+    public FileResponse getTemplateCsv() {
+        var templateStatement = new BankingStatementResponse(
+                "ACCOUNT_NUMBER",
+                LocalDateTime.now(),
+                "BENEFICIARY",
+                "COMMENT",
+                2.0,
+                Currency.EUR);
+        var byteStream = csvSerializer.serialize(List.of(templateStatement), BankingStatementResponse.class);
+        var inputStream = new InputStreamResource(byteStream);
+
+        var filename = "banking-statements-template.csv";
 
         return new FileResponse(inputStream, filename, "application/csv");
     }
