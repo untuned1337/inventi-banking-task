@@ -131,11 +131,13 @@ public class BankingStatementServiceTests {
         var dateRange = new DateRangeRequest();
         var service = new BankingStatementService(repository, modelMapper, csvSerializer, currencyConverter);
         var expectedBalance = 101.0;
+        var expectedCurrency = Currency.EUR;
 
         // Act
-        var balance = service.getAccountBalance(accountId, dateRange);
+        var response = service.getAccountBalance(accountId, dateRange);
 
         // Assert
-        assertThat(balance, Matchers.equalTo(expectedBalance));
+        assertThat(response.getBalance(), Matchers.equalTo(expectedBalance));
+        assertThat(response.getCurrency(), Matchers.equalTo(expectedCurrency));
     }
 }

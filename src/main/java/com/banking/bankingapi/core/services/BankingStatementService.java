@@ -1,5 +1,6 @@
 package com.banking.bankingapi.core.services;
 
+import com.banking.bankingapi.core.dto.accounts.AccountBalanceResponse;
 import com.banking.bankingapi.core.dto.bankingStatements.BankingStatementResponse;
 import com.banking.bankingapi.core.dto.bankingStatements.CreateBankingStatementRequest;
 import com.banking.bankingapi.core.dto.common.DateRangeRequest;
@@ -7,6 +8,7 @@ import com.banking.bankingapi.core.dto.common.FileResponse;
 import com.banking.bankingapi.core.extensions.ModelMapperExtensions;
 import com.banking.bankingapi.core.repositories.BankingStatementRepository;
 import com.banking.bankingapi.core.services.csv.CsvSerializer;
+import com.banking.bankingapi.domain.Currency;
 import com.banking.bankingapi.domain.entities.BankingStatement;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.InputStreamResource;
@@ -64,7 +66,7 @@ public class BankingStatementService {
         repository.createMany(statements);
     }
 
-    public double getAccountBalance(String accountId, DateRangeRequest dateRange) {
+    public AccountBalanceResponse getAccountBalance(String accountId, DateRangeRequest dateRange) {
         var payedAmount = repository.getByFilter(
             (statement) -> Objects.equals(statement.getAccountNumber(), accountId)
                 && dateRange.includes(statement.getOperationDateTime())
@@ -80,6 +82,6 @@ public class BankingStatementService {
 
         var balance = benefitedAmount - payedAmount;
 
-        return MathHelpers.roundTo2decimalPlaces(balance);
+        return new AccountBalanceResponse(balance, Currency.EUR);
     }
 }
